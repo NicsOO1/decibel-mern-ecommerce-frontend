@@ -1,0 +1,70 @@
+import React from "react";
+import { FaInstagram } from "react-icons/fa6";
+import { PiXLogoBold } from "react-icons/pi";
+import { FaLinkedinIn } from "react-icons/fa";
+
+const Footer = () => {
+  const date = new Date();
+  const year = date.getFullYear();
+
+  return (
+    <footer className="bg-white text-gray-700 py-12 px-6 mt-20 border-t border-gray-200">
+  <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+
+    {/* Brand */}
+    <div>
+      <h2 className="text-gray-900 font-extrabold text-3xl tracking-tight mb-4 cursor-pointer">
+        DECIBEL.
+      </h2>
+      <p className="text-gray-500 leading-relaxed">
+        Experience audio the way it’s meant to be heard. Premium headphones, TWS, and speakers designed for clarity and comfort.
+      </p>
+    </div>
+
+    {/* Shop */}
+    <div>
+      <h3 className="text-gray-900 font-semibold text-lg mb-4">Shop</h3>
+      <ul className="space-y-2">
+        <li className="hover:text-gray-900 cursor-pointer">Headphones</li>
+        <li className="hover:text-gray-900 cursor-pointer">TWS</li>
+        <li className="hover:text-gray-900 cursor-pointer">Speakers</li>
+        <li className="hover:text-gray-900 cursor-pointer">Bestsellers</li>
+      </ul>
+    </div>
+
+    {/* Support */}
+    <div>
+      <h3 className="text-gray-900 font-semibold text-lg mb-4">Support</h3>
+      <ul className="space-y-2">
+        <li className="hover:text-gray-900 cursor-pointer">Order Tracking</li>
+        <li className="hover:text-gray-900 cursor-pointer">Warranty & Service</li>
+        <li className="hover:text-gray-900 cursor-pointer">Refund Policy</li>
+        <li className="hover:text-gray-900 cursor-pointer">Contact Us</li>
+      </ul>
+    </div>
+
+    {/* Social */}
+    <div>
+      <h3 className="text-gray-900 font-semibold text-lg mb-4">Connect</h3>
+      <div className="flex items-center gap-6 text-2xl text-gray-700">
+        <FaInstagram className="cursor-pointer hover:text-gray-900" />
+        <PiXLogoBold className="cursor-pointer hover:text-gray-900" />
+        <FaLinkedinIn className="cursor-pointer hover:text-gray-900" />
+      </div>
+    </div>
+  </div>
+
+  {/* Bottom Bar */}
+  <div className="border-t border-gray-200 mt-12 pt-6 text-sm flex flex-col md:flex-row justify-between items-center">
+    <p>&copy; {new Date().getFullYear()} Decibel. All rights reserved.</p>
+    <div className="flex gap-6 mt-4 md:mt-0">
+      <p className="cursor-pointer hover:text-gray-900">Privacy Policy</p>
+      <p className="cursor-pointer hover:text-gray-900">Terms of Service</p>
+    </div>
+  </div>
+</footer>
+
+  );
+};
+
+export default Footer;

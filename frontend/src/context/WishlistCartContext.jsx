@@ -1,0 +1,140 @@
+import { createContext, useContext, useEffect, useState } from "react";
+import {
+  addToWishlist,
+  getWishlist,
+  removeFromWishlist,
+} from "../services/wishlistService";
+import {
+  addToCart,
+  getCartItems,
+  removeFromCart,
+  clearCart
+} from "../services/cartService";
+import { useAuth } from "./AuthContext";
+import { toast, Slide } from "react-toastify";
+
+const WishlistCartContext = createContext();
+
+export const WishlistCartProvider = ({ children }) => {
+  const [wishlist, setWishlist] = useState([]);
+  const [cart, setCart] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
+
+  // fetch user wishlistCart datas
+  useEffect(() => {
+    const fetchWishlistCartDatas = async () => {
+      setLoading(true);
+      if (!user) return;
+
+      // fetching wishlist
+      const wishlist = await getWishlist(user.id);
+      setWishlist(wishlist);
+
+      // fetching cart
+      const cart = await getCartItems(user.id);
+      setCart(cart);
+    };
+
+    fetchWishlistCartDatas();
+    setLoading(false);
+  }, [user]);
+
+  // add to cart
+  const handleAddToCart = async (product) => {
+    if (!user) return;
+
+    // adding quantity object with product
+    setLoading(true);
+    await addToCart(user.id, { ...product, quantity: 1 });
+    setCart((prev) => [...prev, { ...product, quantity: 1 }]);
+
+    setLoading(false);
+    toast.dismiss();
+    toast.success("Product added to cart");
+    
+  };
+
+  // update quantity
+  const handleUpdateQuantity = (productId, newQty) => {
+    setCart((prev) =>
+      prev.map((item) =>
+        item.id === productId ? { ...item, quantity: newQty } : item
+      )
+    );
+  };
+
+  //  subtotal
+  const subTotal = cart.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  // total
+  const gst = subTotal * 0.18;
+  const total = (subTotal + gst).toFixed(2);
+
+  // remove from cart
+  const handleRemoveFromCart = async (productId) => {
+    setLoading(true);
+    await removeFromCart(user.id, productId);
+
+    setCart((prev) => prev.filter((item) => item.id !== productId));
+
+    setLoading(false);
+    toast.dismiss();
+    toast.info("Product removed from the cart");
+  };
+
+  // clear cart
+  const handleClearCart = () => {
+    clearCart(user.id);
+    setCart([]);
+  }
+
+  // add to wishlist
+  const handleAddToWishlist = async (product) => {
+    if (!user) return;
+
+    setLoading(true);
+    await addToWishlist(user.id, product);
+    setWishlist((prev) => [...prev, product]);
+
+    setLoading(false);
+    toast.dismiss();
+    toast.success("Product added to wishlist");
+  };
+
+  // remove from wishlist
+  const handleRemoveFromWishlist = async (productId) => {
+    if (!user) return;
+
+    setLoading(true);
+    await removeFromWishlist(user.id, productId);
+    setWishlist((prev) => prev.filter((item) => item.id !== productId));
+    setLoading(false);
+  };
+
+  return (
+    <WishlistCartContext.Provider
+      value={{
+        cart,
+        handleAddToCart,
+        handleRemoveFromCart,
+        handleClearCart,
+        wishlist,
+        handleAddToWishlist,
+        handleRemoveFromWishlist,
+        handleUpdateQuantity,
+        subTotal,
+        gst,
+        loading,
+        total,
+      }}
+    >
+      {children}
+    </WishlistCartContext.Provider>
+  );
+};
+
+export const useWishlistCart = () => useContext(WishlistCartContext);
