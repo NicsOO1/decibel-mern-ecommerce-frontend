@@ -23,8 +23,8 @@ export const registerUser = async (req, res) => {
 
     const savedUser = await newUser.save();
 
-    // JWT token
-    const token = generateToken(savedUser._id);
+    // JWT token and HTTPOnly cookie generation
+    generateToken(res, savedUser._id);
 
     // registration successful
     return res.status(201).json({
@@ -34,7 +34,6 @@ export const registerUser = async (req, res) => {
         username: savedUser.username,
         email: savedUser.email,
       },
-      token,
     });
   } catch (error) {
     console.error("Register Error:", error);
@@ -64,6 +63,9 @@ export const loginUser = async (req, res) => {
         });
       }
 
+      // JWT token and HTTPOnly cookie generation
+      generateToken(res, user._id);
+
       return res.status(200).json({
         message: "Login successful",
         user: {
@@ -74,7 +76,6 @@ export const loginUser = async (req, res) => {
           wishlist: user.wishlist,
           cart: user.cart,
         },
-        token: generateToken(user._id),
       });
     } else {
       return res.status(401).json({ message: "Invalid email or password" });

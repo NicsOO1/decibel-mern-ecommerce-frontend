@@ -5,6 +5,7 @@ import { connectDB } from "./config/db.js";
 import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import cors from "cors";
+import cookieParser from 'cookie-parser';
 
 await connectDB();
 
@@ -13,6 +14,7 @@ const PORT = 5000;
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 // product router
 app.use("/api/products", productRoutes);
