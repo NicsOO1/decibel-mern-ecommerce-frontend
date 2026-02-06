@@ -18,7 +18,7 @@ const Register = () => {
     try {
       const userData = await register({ username, email, password, confirmPassword });
       if (userData) {
-        toast.success(`Account created! Welcome, ${userData.username}`);
+        toast.success(`Login successful! Welcome, ${userData.username}`);
       }
     } catch (error) {
       console.error(error);

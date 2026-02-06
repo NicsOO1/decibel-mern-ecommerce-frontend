@@ -81,7 +81,7 @@ export const loginUser = async (req, res) => {
         },
       });
     } else {
-      return res.status(401).json({ message: "User not found. Verify credentials" });
+      return res.status(401).json({ message: "Verify your credentials" });
     }
   } catch (error) {
     console.error("Login error:", error);
