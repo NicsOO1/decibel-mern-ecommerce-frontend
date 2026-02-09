@@ -100,7 +100,7 @@ export const AuthProvider = ({ children }) => {
   // update user
   const updateUser = (updatedUser) => {
     setUser(updatedUser);
-    sessionStorage.setItem("user", JSON.stringify(updatedUser));
+    localStorage.setItem("userInfo", JSON.stringify(updatedUser));
   };
 
   return (

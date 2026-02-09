@@ -4,33 +4,35 @@ import { useAuth } from "../context/AuthContext";
 import { useWishlistCart } from "../context/WishlistCartContext";
 import { useAppNavigation } from "../hooks/useAppNavigation";
 
-const Card = ({ id, productName, type, price, img }) => {
-  const { goDetails } = useAppNavigation()
-  const { requireAuth } = useAuth();
-  const { wishlist, handleAddToWishlist, handleRemoveFromWishlist, cart, handleAddToCart } = useWishlistCart();
+const Card = (product) => {
+  const { _id, productName, type, price, img } = product;
+  const { goDetails } = useAppNavigation();
+  const { user } = useAuth();
+  const { wishlist, handleToggleWishlist, cart, handleAddToCart } =
+    useWishlistCart();
 
-  const isWishlisted = wishlist.some((item) => item.id === id);
+  const isWishlisted = wishlist?.some(
+    (item) => item?._id?.toString() === _id?.toString(),
+  );
   const isCart = cart.some((item) => item.id === id);
 
   // cart actions
   const toggleCart = async () => {
-    requireAuth(); 
+    requireAuth();
 
     if (isCart) toast.error("Item already added to cart");
     else {
       await handleAddToCart({ id, productName, type, price, img });
     }
-  }
+  };
 
-  // wishlist actions
-  const toggleWishlist = async () => {
-    // check if user exists
-    requireAuth();
-
-    if (isWishlisted) await handleRemoveFromWishlist(id);
-    else {
-      await handleAddToWishlist({ id, productName, type, price, img });
+  const toggleWishlist = async (e) => {
+    e.stopPropagation();
+    if (!user) {
+      toast.error("Please login first");
+      return;
     }
+    await handleToggleWishlist(product);
   };
 
   return (
@@ -49,7 +51,10 @@ const Card = ({ id, productName, type, price, img }) => {
         </p>
         <div className="mt-4 w-full flex justify-between items-center">
           <p className="text-xl font-bold text-blue-500">₹{price}</p>
-          <button onClick={toggleCart} className="bg-yellow-300 w-fit px-8 py-2 rounded-4xl font-semibold transition-all duration-300 ease-out hover:bg-yellow-300/80">
+          <button
+            onClick={toggleCart}
+            className="bg-yellow-300 w-fit px-8 py-2 rounded-4xl font-semibold transition-all duration-300 ease-out hover:bg-yellow-300/80"
+          >
             Add to Cart
           </button>
         </div>

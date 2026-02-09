@@ -154,7 +154,7 @@ const Products = () => {
             return (
               <Card
                 key={product._id}
-                id={product._id}
+                _id={product._id}
                 productName={product.productName}
                 type={product.type}
                 price={product.price}
@@ -168,7 +168,7 @@ const Products = () => {
           <Footer />
         </div> */}
       </div>
-    </div>
+    </div>  
   );
 };
 

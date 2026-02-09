@@ -1,29 +1,19 @@
 import api from "./api";
 
-// fetching user wishlist
-export const getWishlist = async (userId) => {
+export const getWishlistApi = async () => {
   try {
-    const { data: user } = await api.get(`/users/${userId}`);
-    return user.wishlist || [];
-  } 
-  catch (error) {
-    console.error("Error while fetching wishlist", error);
-    return [];
+    const { data } = await api.get("/wishlist");
+    return data; //wishlist[]
+  } catch (error) {
+    console.error(error);
   }
 };
 
-// add or update userwishlist
-export const addToWishlist = async (userId, product) => {
-  const { data: user } = await api.get(`/users/${userId}`);
-  const updatedWislist = [...user.wishlist, product];
-  await api.patch(`/users/${userId}`, { wishlist: updatedWislist });
-};
-
-// remove from wishlist
-export const removeFromWishlist = async (userId, productId) => {
-  const { data: user } = await api.get(`/users/${userId}`);
-  const updatedWislist = [
-    ...user.wishlist.filter((item) => item.id !== productId),
-  ];
-  await api.patch(`/users/${userId}`, { wishlist: updatedWislist });
+export const toggleWishlistApi = async (productId) => {
+  try {
+    const { data } = await api.post("/wishlist", { productId });
+    return data; //{message, wishlist[]}
+  } catch (error) {
+    console.error(error);
+  }
 };

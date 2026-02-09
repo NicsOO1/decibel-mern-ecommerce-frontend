@@ -2,9 +2,9 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 export const ProtectedRoute = ({ children }) => {
-  const { user, loadingAuth } = useAuth();
+  const { user, loading } = useAuth();
 
-  if (loadingAuth) {
+  if (loading) {
     return <div className="text-center mt-10">Loading...</div>
   }
 

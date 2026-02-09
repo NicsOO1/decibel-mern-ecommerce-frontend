@@ -6,17 +6,26 @@ import Card from "../components/Card";
 import EmptyMessage from "../components/EmptyMessage";
 import { useWishlistCart } from "../context/WishlistCartContext";
 import { mirage } from "ldrs";
+import { useAuth } from "../context/AuthContext";
+import { useAppNavigation } from "../hooks/useAppNavigation";
 mirage.register();
 
 const Wishlist = () => {
-  const { wishlist, loading } = useWishlistCart();
+  const { wishlist, loading: wishlistLoading } = useWishlistCart();
+  const { user, loading: authLoading } = useAuth();
+  const { goLogin } = useAppNavigation();
 
-  if (loading) {
+  if (wishlistLoading || authLoading) {
     return (
       <div className="w-full h-screen flex items-center justify-center">
         <l-mirage size="60" speed="2.5" color="black"></l-mirage>
       </div>
     );
+  }
+
+  if (!user) {
+    goLogin();
+    return null;
   }
 
   return (
@@ -34,17 +43,17 @@ const Wishlist = () => {
           {wishlist.map((item) => {
             return (
               <Card
-                key={item.id}
-                id={item.id}
+                key={item._id}
+                _id={item._id}
                 productName={item.productName}
                 type={item.type}
                 price={item.price}
-                img={item.img}
+                img={item.image}
               />
             );
           })}
         </div>
-{/* 
+        {/* 
         <div className="w-full mx-auto pt-12 lg:pt-24">
           <Footer />
         </div> */}

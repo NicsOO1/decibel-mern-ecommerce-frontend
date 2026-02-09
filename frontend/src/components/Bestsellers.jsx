@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { HiMiniArrowLongRight } from "react-icons/hi2";
-import Card from "./card";
+import Card from "./Card";
 import SubHead from "./SubHead";
 import { useAppNavigation } from "../hooks/useAppNavigation";
 import { useProducts } from "../context/ProductContext"
@@ -25,7 +25,7 @@ const Bestsellers = () => {
       <div id="product-grid" className="mt-6 lg:mt-12 grid grid-cols-1 lg:grid-cols-4 gap-6 w-[1fr, 1fr, 1fr, 1fr]">
         {
           bestsellers.map((product) => {
-            return (<Card key={product._id} id={product.id} productName={product.productName} type={product.type} price={product.price} img={product.image} />)
+            return (<Card key={product._id} _id={product._id} productName={product.productName} type={product.type} price={product.price} img={product.image} />)
           })
         }
         
