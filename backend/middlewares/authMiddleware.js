@@ -9,9 +9,15 @@ export const protect = async (req, res, next) => {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      // set req.user with user find from db by avoiding the password
-      req.user = await User.findById(decoded.userId).select("-password");
+      const user = await User.findById(decoded.userId).select("-password");
 
+      if (!user) {
+        return res
+          .status(401)
+          .json({ message: "User no longer exists. Access denied." });
+      }
+
+      req.user = user;
       next();
     } catch (error) {
       console.error(error);

@@ -146,7 +146,7 @@ const Header = () => {
               >
                 <ul className="w-full flex flex-col py-[1px]">
                   <li
-                    onClick={goUser}
+                    onClick={() => goUser(user?._id)}
                     className="w-full flex px-3 items-center gap-6 h-10 font-medium text-gray-700 hover:bg-gray-100 cursor-pointer"
                   >
                     <FaRegUser /> User
@@ -154,7 +154,7 @@ const Header = () => {
 
                   <li
                     className="w-full flex px-3 items-center gap-6 h-10 font-medium text-gray-700 hover:bg-gray-100 cursor-pointer"
-                    onClick={() => goOrders(user.id)}
+                    onClick={() => goOrders(user._id)}
                   >
                     <BsBoxSeam /> Orders
                   </li>

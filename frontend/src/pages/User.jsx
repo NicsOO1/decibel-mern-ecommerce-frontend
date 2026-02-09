@@ -36,20 +36,17 @@ const User = () => {
     try {
       setSaving(true);
       // updating user in db
-      const res = await api.patch(`/users/${user.id}`, {
+      const res = await api.patch("/users/profile", {
         username: newUsername,
       });
 
-      // updating user in context
-      const updatedUser = res?.data
-        ? res.data
-        : { ...user, username: newUsername };
-      updateUser(updatedUser);
+     updateUser(res.data);
 
       toast.success("Username updated Successfully");
     } catch (error) {
+      const errorMessage = error?.response?.data?.message || "An unexpected error happen"
       console.error("Error while updating username:", error);
-      toast.error("Failed to update Username");
+      toast.error(errorMessage);
     } finally {
       setSaving(false);
       setEditingUsername(false);
@@ -59,17 +56,17 @@ const User = () => {
   const handleSaveEmail = async () => {
     try {
       setSaving(true);
-      const res = await api.patch(`/users/${user.id}`, { email: newEmail });
+      const res = await api.patch("/users/profile", { email: newEmail });
 
-      const updatedUser = res?.data ? res.data : { ...user, email: newEmail };
-      updateUser(updatedUser);
+      updateUser(res.data);
       toast.success("Email updated Successfully");
     } catch (error) {
+      const errorMessage = error?.response?.data?.message || "An unexpected error happen"
       console.error("Error while updating email:", error);
-      toast.error("Failed to update Email");
+      toast.error(errorMessage);
     } finally {
       setSaving(false);
-      setEditingUsername(false);
+      setEditingEmail(false);
     }
   };
 

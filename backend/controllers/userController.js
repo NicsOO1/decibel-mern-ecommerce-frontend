@@ -11,7 +11,9 @@ export const registerUser = async (req, res) => {
 
     const userExists = await User.findOne({ email });
     if (userExists) {
-      return res.status(400).json({ message: "User already exists. Please login" });
+      return res
+        .status(400)
+        .json({ message: "User already exists. Please login" });
     }
 
     // newUser instance
@@ -30,7 +32,7 @@ export const registerUser = async (req, res) => {
     return res.status(201).json({
       message: "Registration successful",
       user: {
-        id: savedUser._id,
+        _id: savedUser._id,
         username: savedUser.username,
         email: savedUser.email,
         role: savedUser.role,
@@ -72,7 +74,7 @@ export const loginUser = async (req, res) => {
       return res.status(200).json({
         message: "Login successful",
         user: {
-          id: user._id,
+          _id: user._id,
           username: user.username,
           email: user.email,
           role: user.role,
@@ -96,7 +98,39 @@ export const logoutUser = (req, res) => {
     httpOnly: true,
     expires: new Date(0),
     sameSite: "strict",
-  }); 
+  });
 
   res.status(200).json({ message: "Logged out successfully" });
+};
+
+export const updateUserProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.username = req.body.username || user.username;
+    user.email = req.body.email || user.email;
+
+    const updatedUser = await user.save();
+
+    return res.status(200).json({
+      _id: updatedUser._id,
+      username: updatedUser.username,
+      email: updatedUser.email,
+      role: updatedUser.role,
+      wishlist: updatedUser.wishlist,
+      cart: updatedUser.cart,
+    });
+  } catch (error) {
+    // Handle Duplicate Email Error (MongoDB Error Code 11000)
+    if (error.code === 11000) {
+      return res.status(400).json({ message: "Email already in use" });
+    }
+    return res
+      .status(500)
+      .json({ message: "Server error during update", error: error.message });
+  }
 };
