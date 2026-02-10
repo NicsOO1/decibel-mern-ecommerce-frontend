@@ -4,6 +4,7 @@ import express from "express";
 import { connectDB } from "./config/db.js";
 import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import cartRoutes from "./routes/cartRoutes.js"
 import wishlistRoutes from "./routes/wishlistRoutes.js"
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -26,6 +27,9 @@ app.use("/api/users", userRoutes);
 
 // wishlist router
 app.use("/api/wishlist", wishlistRoutes)
+
+// cart router
+app.use("/api/cart", cartRoutes)
 
 app.listen(PORT, () =>
   console.log(`server is running at http://localhost:${PORT}`),
