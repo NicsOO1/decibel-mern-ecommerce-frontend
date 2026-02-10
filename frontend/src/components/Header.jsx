@@ -90,7 +90,7 @@ const Header = () => {
           <div id="menu-box" className="flex gap-8 items-center">
             <div id="menu-box" className="flex gap-3">
               <IoBagOutline
-                className="bg-white w-8 h-8 p-1 rounded-full cursor-pointer"
+                className="w-8 h-8 p-1 rounded-full cursor-pointer"
                 onClick={goProducts}
               />
 
@@ -106,7 +106,7 @@ const Header = () => {
                 </span>
                 <IoCartOutline
                   onClick={goCart}
-                  className="bg-white w-8 h-8 p-1 rounded-full text-center cursor-pointer"
+                  className="w-8 h-8 p-1 rounded-full text-center cursor-pointer"
                 />
               </div>
 
@@ -122,7 +122,7 @@ const Header = () => {
                 </span>
                 <IoMdHeartEmpty
                   onClick={goWishlist}
-                  className="bg-white w-8 h-8 p-1 rounded-full text-center cursor-pointer"
+                  className="w-8 h-8 p-1 rounded-full text-center cursor-pointer"
                 />
               </div>
             </div>
