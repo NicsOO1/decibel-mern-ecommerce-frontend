@@ -1,5 +1,21 @@
 import { User } from "../models/User.js";
 
+// Get cart
+export const getCart = async (req, res) => {
+  const userId = req.user._id;
+
+  try {
+    const user = await User.findById(userId).populate("cart.product");
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    return res.status(200).json(user.cart);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Failed to fetch cart" });
+  }
+};
+
 // Add to cart
 export const addToCart = async (req, res) => {
   const { productId, quantity = 1 } = req.body;
