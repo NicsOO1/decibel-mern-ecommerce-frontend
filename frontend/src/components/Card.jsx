@@ -8,30 +8,23 @@ const Card = (product) => {
   const { _id, productName, type, price, img } = product;
   const { goDetails } = useAppNavigation();
   const { user } = useAuth();
-  const { wishlist, handleToggleWishlist, cart, handleAddToCart } =
-    useWishlistCart();
-
-  const isWishlisted = wishlist?.some(
-    (item) => item?._id?.toString() === _id?.toString(),
-  );
-  const isCart = cart.some((item) => item.id === id);
+  const { wishlist, handleToggleWishlist, cart, handleAddToCart } = useWishlistCart();
+  
+  const isWishlisted = wishlist?.some((item) => item?._id?.toString() === _id?.toString());
+  const isCart = cart.some((item) => item?._id?.toString() === _id?.toString());
 
   // cart actions
-  const toggleCart = async () => {
-    requireAuth();
+  const toggleCart = async (e) => {
+    e.stopPropagation();
 
-    if (isCart) toast.error("Item already added to cart");
-    else {
-      await handleAddToCart({ id, productName, type, price, img });
-    }
+    if (!user) return toast.error("Please login first");
+    await handleAddToCart(_id);
   };
 
   const toggleWishlist = async (e) => {
     e.stopPropagation();
-    if (!user) {
-      toast.error("Please login first");
-      return;
-    }
+
+    if (!user) return toast.error("Please login first");
     await handleToggleWishlist(product);
   };
 

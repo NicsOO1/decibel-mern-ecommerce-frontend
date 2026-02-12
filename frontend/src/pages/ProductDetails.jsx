@@ -19,7 +19,6 @@ const ProductDetails = () => {
   const { id } = useParams();
   const { products, loading: productLoading } = useProducts();
   const product = products.find((item) => item._id === id);
-  
 
   const { user, loading: authLoading } = useAuth();
   const { goCart } = useAppNavigation();
@@ -31,7 +30,7 @@ const ProductDetails = () => {
     loading: wishlistCartLoading,
   } = useWishlistCart();
 
-  const isCart = cart.some((item) => item.id === id);
+  const isCart = cart.some((item) => item?._id === product?._id);
   const isWishlisted = wishlist.some((item) => item?._id === product?._id);
 
   if (wishlistCartLoading || authLoading || productLoading) {
@@ -58,21 +57,15 @@ const ProductDetails = () => {
   const toggleWishlist = async (e) => {
     e.stopPropagation();
 
-    if (!user) {
-      toast.error("Please login first");
-      return;
-    }
-
+    if (!user) return toast.error("Please login first");
     await handleToggleWishlist(product);
   };
 
   // cart actions
-  const toggleCart = async () => {
-    requireAuth();
-
-    if (isCart) toast.error("Item already added to cart");
+  const toggleCart = async (productId) => {
+    if (isCart) return toast.error("Item already added to cart");
     else {
-      await handleAddToCart({ ...product, img: product.image });
+      await handleAddToCart(productId);
       goCart();
     }
   };
@@ -121,7 +114,7 @@ const ProductDetails = () => {
             </div>
 
             <div id="button-box" className="flex gap-4 lg:mt-10 items-center">
-              <div className="bg-gray-100 p-1 rounded-full">
+              <div className="p-1 rounded-full">
                 <FiHeart
                   onClick={toggleWishlist}
                   className={
@@ -133,8 +126,8 @@ const ProductDetails = () => {
               </div>
 
               <button
-                className="flex  items-center gap-3 min-w-40 justify-center py-2 bg-orange-400 text-white rounded-4xl font-semibold"
-                onClick={toggleCart}
+                className="flex  items-center gap-3 min-w-40 justify-center py-2 bg-yellow-300 rounded-4xl font-semibold  hover:bg-yellow-300/90"
+                onClick={() => toggleCart(product._id)}
               >
                 Add to Cart <FaCartShopping />
               </button>

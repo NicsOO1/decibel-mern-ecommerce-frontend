@@ -1,32 +1,27 @@
 import api from "./api";
 
-// fetching cartitems
-export const getCartItems = async (userId) => {
-  try {
-    const { data: user } = await api.get(`/users/${userId}`);
-    return user.cart || [];
-  } catch (error) {
-    console.error("Error while fetching cart items", error);
-    return [];
-  }
+// Get cart
+export const getCartApi = async () => {
+  const { data } = await api.get("/cart");
+  return data;
 };
 
-// add to cart
-export const addToCart = async (userId, product) => {
-  try {
-    const { data: user } = await api.get(`/users/${userId}`);
-    const updatedCart = [...user.cart, product];
-    await api.patch(`/users/${userId}`, { cart: updatedCart });
-  } catch (error) {
-    console.error("Error while adding items to cart", error);
-  }
+// Add to cart
+export const addToCartApi = async (productId, quantity = 1) => {
+  const { data } = await api.post("/cart/add", { productId, quantity });
+  return data; //cart[]
 };
 
-// remove from cart
-export const removeFromCart = async (userId, productId) => {
-  const { data: user } = await api.get(`/users/${userId}`);
-  const updatedCart = [...user.cart.filter((item) => item.id !== productId)];
-  await api.patch(`/users/${userId}`, { cart: updatedCart });
+// Update cart
+export const updateCartApi = async (productId, quantity) => {
+  const { data } = await api.patch("/cart/update", { productId, quantity });
+  return data;
+};
+
+// Remove from cart
+export const removeFromCartApi = async (productId) => {
+  const { data } = await api.delete(`/cart/remove/${productId}`);
+  return data;
 };
 
 // clear cart
