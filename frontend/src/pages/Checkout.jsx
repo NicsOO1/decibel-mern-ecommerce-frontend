@@ -252,19 +252,19 @@ const Checkout = () => {
                 return (
                   <div className="space-y-4 mb-6 max-h-64 overflow-y-auto">
                     <div
-                      key={item.id}
+                      key={item.product._id}
                       className="flex justify-between items-start gap-2"
                     >
                       <div className="flex-1">
                         <p className="font-medium text-sm text-gray-800 truncate">
-                          {item.productName}
+                          {item.product.productName}
                         </p>
                         <p className="text-xs text-gray-500">
                           Qty: {item.quantity}
                         </p>
                       </div>
                       <p className="font-semibold text-sm whitespace-nowrap">
-                        ₹{item.price * item.quantity}
+                        ₹{item.product.price * item.quantity}
                       </p>
                     </div>
                   </div>
@@ -286,7 +286,7 @@ const Checkout = () => {
                 </div>
                 <div className="flex justify-between text-sm">
                   <p className="text-gray-600">GST (18%)</p>
-                  <p className="font-semibold">+ ₹{gst.toFixed(2)}</p>
+                  <p className="font-semibold">+ ₹{gst}</p>
                 </div>
 
                 {/* Total */}
