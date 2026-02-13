@@ -1,5 +1,23 @@
 import { Order } from "../models/Order.js";
 
+// Get order
+export const getOrders = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const orders = await Order.find({ userId }).sort({ createdAt: -1 });
+
+    // if orders empty
+    if (!orders || orders.length === 0) return res.status(200).json([]);
+
+    return res.status(200).json(orders);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Order fetching failed", error: error.message });
+  }
+};
+
+// Create new order
 export const createOrder = async (req, res) => {
   try {
     const { items, amount, address, upiId } = req.body;
@@ -27,8 +45,9 @@ export const createOrder = async (req, res) => {
     const savedOrder = await newOrder.save();
 
     return res.status(201).json(savedOrder);
-
   } catch (error) {
-    return res.status(500).json({ message: "Order creation failed", error: error.message });
+    return res
+      .status(500)
+      .json({ message: "Order creation failed", error: error.message });
   }
 };
