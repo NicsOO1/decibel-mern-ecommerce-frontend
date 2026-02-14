@@ -12,6 +12,9 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // isAdmin check
+  const isAdmin = user && user.role === "admin";
+
   // persistent user across refresh
   useEffect(() => {
     const savedUser = localStorage.getItem("userInfo");
@@ -112,6 +115,7 @@ export const AuthProvider = ({ children }) => {
         logOut,
         loading,
         updateUser,
+        isAdmin
       }}
     >
       {children}
