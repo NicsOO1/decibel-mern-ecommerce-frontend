@@ -26,7 +26,7 @@ export const getProductById = async (req, res) => {
   }
 };
 
-// CREATE product
+// CREATE product **admin**
 export const createProduct = async (req, res) => {
   try {
     const {
@@ -96,5 +96,78 @@ export const createProduct = async (req, res) => {
       message: "Product creation failed",
       error: error.message,
     });
+  }
+};
+
+// UPDATE product **admin**
+export const updateProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const existingProduct = await Product.findById(id);
+
+    if (!existingProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    const updateData = { ...req.body };
+
+    if (req.file) {
+      // delete old image from cloudinary
+      if (existingProduct.cloudinary_id) {
+        await cloudinary.uploader.destroy(existingProduct.cloudinary_id);
+      }
+
+      // upload new image
+      const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+        folder: "decibel_audio",
+      });
+
+      // cleanup local temp file
+      fs.unlinkSync(req.file.path);
+
+      updateData.image = uploadResult.secure_url;
+      updateData.cloudinary_id = uploadResult.public_id;
+    }
+
+    // Convert numeric fields to ensure data type consistency
+    if (updateData.price) updateData.price = Number(updateData.price);
+    if (updateData.rating) updateData.rating = Number(updateData.rating);
+
+    // update product in db
+    const updatedProduct = await Product.findByIdAndUpdate(
+      id,
+      { $set: updateData },
+      { new: true, runValidators: true },
+    );
+
+    return res.status(200).json(updatedProduct);
+  } catch (error) {
+    if (req.file) fs.unlinkSync(req.file.path);
+
+    console.error("Update Error:", error);
+    return res
+      .status(500)
+      .json({ message: "Update failed", error: error.message });
+  }
+};
+
+// DELETE product **admin**
+export const deleteProduct = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const product = await Product.findById(id);
+    if (!product) return res.status(404).json({ message: "Product not found" });
+
+    // delete image from Cloudinary
+    if (product.cloudinary_id) {
+      await cloudinary.uploader.destroy(product.cloudinary_id);
+    }
+    // delete from db
+    await Product.findByIdAndDelete(id);
+
+    return res.status(200).json({ message: "Product and assets deleted" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Deletion failed" });
   }
 };
