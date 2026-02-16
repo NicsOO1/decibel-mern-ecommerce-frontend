@@ -24,7 +24,7 @@ const Login = () => {
       try {
         const userData = await login({ email, password });
 
-        if (userData.role === "user") {
+        if (userData && userData?.role === "user") {
           showSuccess(`Welcome back, ${userData.username}`);
         }
       } catch (err) {
