@@ -150,7 +150,7 @@ export const getAllUsers = async (req, res) => {
 // Block user **admin**
 export const toggleUserBlock = async (req, res) => {
   try {
-    const { id } = req.params.id;
+    const { id } = req.params;
     const { isBlocked } = req.body;
 
     // Prevent Admin from blocking themselves

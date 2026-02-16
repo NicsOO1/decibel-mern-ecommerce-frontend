@@ -21,7 +21,7 @@ export const protect = async (req, res, next) => {
         return res
           .status(403)
           .json({
-            message: "Your access has been restricted. Please contact support",
+            message: "Your access has been suspended. Please contact support",
           });
       }
 

@@ -20,6 +20,6 @@ router.post("/logout", logoutUser);
 router.patch("/profile", protect, updateUserProfile);
 
 //admin routes
-router.patch("/block/:id", admin, protect, toggleUserBlock);
+router.patch("/block/:id", protect, admin, toggleUserBlock);
 
 export default router;
