@@ -13,7 +13,7 @@ const Features = () => {
 
      <div id="features-grid" className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6 lg:mt-12">
 
-      <FeatureCard icon={<MdOutlineShield className='text-4xl' />} feature="3 Year Warranty" sub="Full Protection Coverage" />
+      <FeatureCard icon={<MdOutlineShield className='text-4xl' />} feature="3 Years Warranty" sub="Full Protection Coverage" />
 
       <FeatureCard icon={<LuTruck className='text-4xl' />} feature="Free Shipping" sub="For Every Order" />
       
