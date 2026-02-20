@@ -34,6 +34,11 @@ const Products = () => {
     fetchLocalProducts();
   }, [searchTerm]);
 
+  // Reset filters when search term changes
+  useEffect(() => {
+    setIsFiltering(false);
+  }, [searchTerm]);
+
   // toggle filter menu
   const toggleFilterMenu = () => {
     document.getElementById("filter").classList.toggle("hidden");
@@ -77,6 +82,12 @@ const Products = () => {
     document.getElementById("filter").classList.add("hidden");
   };
 
+  // Clear all filters
+  const handleClearFilters = () => {
+    setIsFiltering(false);
+    setFilter(finalProducts);
+  };
+
   // loading
   if (loading) {
     return (
@@ -96,11 +107,20 @@ const Products = () => {
             <div className="bg-brand h-[1.5px]" />
           </div>
 
-          <div
-            id="filter-menu"
-            className="relative hover:bg-gray-100 px-4 py-2 flex items-center gap-4 justify-between rounded-xl transition ease-in-out duration-300 cursor-pointer"
-            onClick={toggleFilterMenu}
-          >
+          <div className="flex items-center gap-3">
+            {isFiltering && (
+              <button
+                onClick={handleClearFilters}
+                className="px-3 py-2 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg transition ease-in-out duration-200"
+              >
+                Clear Filters
+              </button>
+            )}
+            <div
+              id="filter-menu"
+              className="relative hover:bg-gray-100 px-4 py-2 flex items-center gap-4 justify-between rounded-xl transition ease-in-out duration-300 cursor-pointer"
+              onClick={toggleFilterMenu}
+            >
             <p className="hh1 text-lg font-medium">Filter</p>
             <IoFilter className="text-lg" />
 
@@ -146,6 +166,7 @@ const Products = () => {
                   Budgets
                 </li>
               </ul>
+            </div>
             </div>
           </div>
         </div>
