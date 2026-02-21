@@ -34,18 +34,19 @@ const Login = () => {
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col lg:flex-row">
-      <div className="w-full lg:w-1/2 px-4 sm:px-6 lg:px-12 py-8 sm:py-12 lg:py-6">
-        <div className="max-w-md mx-auto text-left flex flex-col h-full justify-center">
+    <div className="w-full min-h-screen flex flex-col lg:flex-row bg-[url('/src/assets/audio_doodle_bg.png')] bg-cover bg-center lg:bg-none lg:bg-white relative">
+      <div className="flex-1 flex flex-col justify-center w-full lg:w-1/2 px-4 sm:px-6 lg:px-12 py-8 sm:py-12 lg:py-6 relative z-10">
+        {/* Mobile: Glass Card. Desktop: Clean White */}
+        <div className="w-full max-w-md mx-auto text-center lg:text-left flex flex-col justify-center bg-white/10 lg:bg-transparent p-8 sm:p-10 lg:p-0 rounded-2xl shadow-lg lg:shadow-none border border-white/20 lg:border-none backdrop-blur-xl lg:backdrop-blur-none">
           <p
             id="logo-text"
-            className="font-bold text-2xl sm:text-3xl tracking-tighter cursor-pointer mb-6 sm:mb-10"
+            className="font-bold text-2xl sm:text-3xl tracking-tighter cursor-pointer mb-6 sm:mb-10 text-white lg:text-black"
           >
             DECIBEL.
           </p>
 
-          <div className="mt-4">
-            <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-4 sm:mb-6">
+          <div className="mt-4 lg:mt-0">
+            <h2 className="text-2xl sm:text-3xl font-semibold text-white lg:text-gray-900 mb-4 sm:mb-6">
               Welcome Back, Homie
             </h2>
             <form className="space-y-4 sm:space-y-5" onSubmit={handleSubmit}>
@@ -53,7 +54,7 @@ const Login = () => {
                 <input
                   type="email"
                   placeholder="Email"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 sm:py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-black"
+                  className="w-full bg-white/10 lg:bg-white border border-white/20 lg:border-gray-300 rounded-lg px-4 py-2.5 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-white lg:focus:ring-black text-left text-white lg:text-black placeholder-gray-300 lg:placeholder-gray-500 backdrop-blur-sm lg:backdrop-blur-none"
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
@@ -63,7 +64,7 @@ const Login = () => {
                 <input
                   type="password"
                   placeholder="Password"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 sm:py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-black"
+                  className="w-full bg-white/10 lg:bg-white border border-white/20 lg:border-gray-300 rounded-lg px-4 py-2.5 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-white lg:focus:ring-black text-left text-white lg:text-black placeholder-gray-300 lg:placeholder-gray-500 backdrop-blur-sm lg:backdrop-blur-none"
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
@@ -71,15 +72,15 @@ const Login = () => {
 
               <button
                 type="submit"
-                className="w-full bg-black text-white py-2.5 sm:py-2 rounded-lg text-sm sm:text-base font-medium hover:bg-gray-900 transition-all"
+                className="w-full bg-white lg:bg-black text-black lg:text-white py-3 sm:py-2.5 rounded-lg text-sm sm:text-base font-semibold hover:bg-gray-200 lg:hover:bg-gray-900 transition-all mt-2"
               >
                 Sign In
               </button>
             </form>
 
-            <p className="text-sm text-gray-500 mt-6">
+            <p className="text-sm text-gray-300 lg:text-gray-500 mt-6 lg:text-left">
               Don’t have an account?{" "}
-              <Link to="/register" className="text-black hover:underline">
+              <Link to="/register" className="text-white lg:text-black hover:underline font-semibold lg:font-medium">
                 Sign up
               </Link>
             </p>
