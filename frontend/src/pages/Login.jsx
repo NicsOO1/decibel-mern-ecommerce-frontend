@@ -34,8 +34,8 @@ const Login = () => {
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col lg:flex-row bg-[url('/src/assets/audio_doodle_bg.png')] bg-cover bg-center lg:bg-none lg:bg-white relative">
-      <div className="flex-1 flex flex-col justify-center w-full lg:w-1/2 px-4 sm:px-6 lg:px-12 py-8 sm:py-12 lg:py-6 relative z-10">
+    <div className="w-full min-h-screen lg:h-screen lg:overflow-hidden flex flex-col lg:flex-row bg-[url('/src/assets/audio_doodle_bg.png')] bg-cover bg-center lg:bg-none lg:bg-white relative">
+      <div className="flex-1 flex flex-col justify-center w-full lg:w-1/2 px-4 sm:px-6 lg:px-12 py-8 sm:py-12 lg:py-6 relative z-10 lg:h-full lg:overflow-y-auto">
         {/* Mobile: Glass Card. Desktop: Clean White */}
         <div className="w-full max-w-md mx-auto text-center lg:text-left flex flex-col justify-center bg-white/10 lg:bg-transparent p-8 sm:p-10 lg:p-0 rounded-2xl shadow-lg lg:shadow-none border border-white/20 lg:border-none backdrop-blur-xl lg:backdrop-blur-none">
           <p
