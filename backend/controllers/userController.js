@@ -1,5 +1,6 @@
 import { User } from "../models/User.js";
 import { generateTokens } from "../utils/generateToken.js";
+import jwt from "jsonwebtoken";
 
 export const registerUser = async (req, res) => {
   try {
@@ -114,6 +115,53 @@ export const logoutUser = async (req, res) => {
   });
 
   res.status(200).json({ message: "Logged out successfully" });
+};
+
+export const refreshAccessToken = async (req, res) => {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) {
+      return res
+        .status(401)
+        .json({ message: "Not authorized, no refresh token found" });
+    }
+
+    // verify token
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const user = await User.findById(decoded.userId);
+
+    // validating refresh token
+    if (!user || user.isBlocked || user.refreshToken !== refreshToken) {
+      return res
+        .status(403)
+        .json({ message: "Refresh token is invalid or account is restricted" });
+    }
+
+    // issue new access token
+    const accessToken = jwt.sign(
+      { userId: user._id },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "15m" },
+    );
+
+    // set new accessToken cookie
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== "development",
+      sameSite: "strict",
+      maxAge: 15 * 60 * 1000, //15min
+    });
+
+    return res
+      .status(200)
+      .json({ message: "Access token refreshed successfully" });
+  } catch (error) {
+    console.error("Refresh Token Error:", error);
+    return res
+      .status(403)
+      .json({ message: "Session expired. Please login again." });
+  }
 };
 
 export const updateUserProfile = async (req, res) => {

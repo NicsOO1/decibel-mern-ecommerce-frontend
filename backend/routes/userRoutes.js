@@ -3,6 +3,7 @@ import {
   getAllUsers,
   loginUser,
   logoutUser,
+  refreshAccessToken,
   registerUser,
   toggleUserBlock,
   updateUserProfile,
@@ -13,11 +14,13 @@ import { admin } from "../middlewares/adminMiddleware.js";
 
 const router = express.Router();
 
-router.get("/", protect, admin, getAllUsers);
-router.post("/register", registerUser);
-router.post("/login", limiter, loginUser);
-router.post("/logout", logoutUser);
-router.patch("/profile", protect, updateUserProfile);
+router
+  .get("/", protect, admin, getAllUsers)
+  .post("/register", registerUser)
+  .post("/login", limiter, loginUser)
+  .post("/logout", logoutUser)
+  .patch("/profile", protect, updateUserProfile)
+  .get("/refresh", refreshAccessToken);
 
 //admin routes
 router.patch("/block/:id", protect, admin, toggleUserBlock);

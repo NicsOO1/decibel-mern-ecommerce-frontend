@@ -3,11 +3,11 @@ import { User } from "../models/User.js";
 
 export const protect = async (req, res, next) => {
   // read jwt from cookie (possible by cookie-parser)
-  const token = req.cookies.jwt;
+  const accessToken = req.cookies.accessToken;
 
-  if (token) {
+  if (accessToken) {
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
 
       const user = await User.findById(decoded.userId).select("-password");
 
@@ -18,18 +18,28 @@ export const protect = async (req, res, next) => {
       }
 
       if (user.isBlocked) {
-        return res
-          .status(403)
-          .json({
-            message: "Your access has been suspended. Please contact support",
-          });
+        // make tokens expire
+        res.cookie("accessToken", "", {
+          httpOnly: true,
+          expires: new Date(0),
+        });
+        res.cookie("refreshToken", "", {
+          httpOnly: true,
+          expires: new Date(0),
+        });
+
+        return res.status(403).json({
+          message: "Your access has been suspended. Please contact support",
+        });
       }
 
       req.user = user;
       next();
     } catch (error) {
       console.error(error);
-      return res.status(401).json({ message: "Not authorized. Token failed" });
+      return res
+        .status(401)
+        .json({ message: "Not authorized. Token failed or expired" });
     }
   } else {
     return res.status(401).json({ message: "Not authorized. No token" });
