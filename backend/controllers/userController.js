@@ -1,4 +1,5 @@
 import { User } from "../models/User.js";
+import { sendVerificationEmail } from "../utils/emailService.js";
 import { generateTokens } from "../utils/generateToken.js";
 import jwt from "jsonwebtoken";
 
@@ -12,42 +13,99 @@ export const registerUser = async (req, res) => {
 
     const userExists = await User.findOne({ email });
     if (userExists) {
+      if (!userExists.isVerified) {
+        return res.status(400).json({
+          message:
+            "Account exists but is unverified. Please request a new OTP.",
+        });
+      }
+
       return res
         .status(400)
         .json({ message: "User already exists. Please login" });
     }
+
+    // Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpire = new Date(Date.now() + 10 * 60 * 1000); // 10 mins
 
     // newUser instance
     const newUser = new User({
       username,
       email,
       password,
+      verificationOTP: otp,
+      otpExpire,
+      isVerified: false,
     });
 
-    const savedUser = await newUser.save();
+    await newUser.save();
 
-    // JWT refresh-token generation
-    const { refreshToken } = generateTokens(res, savedUser._id);
-    savedUser.refreshToken = refreshToken;
-    await savedUser.save();
+    // send email via resend
+    await sendVerificationEmail(newUser.email, otp);
 
-    // registration successful
     return res.status(201).json({
-      message: "Registration successful",
-      user: {
-        _id: savedUser._id,
-        username: savedUser.username,
-        email: savedUser.email,
-        role: savedUser.role,
-        wishlist: savedUser.wishlist,
-        cart: savedUser.cart,
-      },
+      message: "Registration successful. Please verify your email.",
+      email: newUser.email,
     });
   } catch (error) {
     console.error("Register Error:", error);
     return res
       .status(500)
       .json({ message: "Server error. Please try again later" });
+  }
+};
+
+export const verifyEmail = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    if (!email || !otp) {
+      return res.status(400).json({ message: "Email and OTP are required" });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+    if (user.isVerified)
+      return res.status(400).json({ message: "Email already verified" });
+
+    // validateOTP
+    if (user.verificationOTP !== otp) {
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
+    if (user.otpExpire < new Date()) {
+      return res
+        .status(400)
+        .json({ message: "OTP has expired. Please request a new one." });
+    }
+
+    user.isVerified = true;
+    user.verificationOTP = undefined;
+    user.otpExpire = undefined;
+
+    // generate tokens
+    const { refreshToken } = generateTokens(res, user._id);
+    user.refreshToken = refreshToken;
+
+    await user.save();
+
+    return res.status(200).json({
+      message: "Welcome to DECIBEL.",
+      user: {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+        wishlist: user.wishlist,
+        cart: user.cart,
+      },
+    });
+  } catch (error) {
+    console.error("Email verify error:", error);
+    return res
+      .status(500)
+      .json({ message: "Verification failed. Please try again." });
   }
 };
 
