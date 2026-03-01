@@ -106,6 +106,7 @@ const App = () => {
         <Route path="*" element={<FourNotFour />} />
       </Routes>
       <ToastContainer
+        limit={1}
         position="top-center"
         autoClose={1500}
         hideProgressBar={true}
