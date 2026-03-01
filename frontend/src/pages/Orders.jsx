@@ -125,6 +125,7 @@ const Orders = () => {
 
                   <div
                     className={`${
+                      order.orderStatus === "Shipped" ||
                       order.orderStatus === "Cancelled" ||
                       order.orderStatus === "Delivered"
                         ? "hidden"
