@@ -63,6 +63,9 @@ const VerifyEmail = () => {
   const handleResend = async (e) => {
     e.preventDefault();
     await resendOtpRequest(email);
+
+    // Reset timer
+    setResendTimer(60)
   };
 
   // handle submit
