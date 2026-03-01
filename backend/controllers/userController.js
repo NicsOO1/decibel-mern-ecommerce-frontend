@@ -56,7 +56,8 @@ export const registerUser = async (req, res) => {
   }
 };
 
-export const verifyEmail = async (req, res) => {
+// Verify Email with OTP
+export const verifyOtp = async (req, res) => {
   try {
     const { email, otp } = req.body;
 
@@ -91,7 +92,6 @@ export const verifyEmail = async (req, res) => {
     await user.save();
 
     return res.status(200).json({
-      message: "Welcome to DECIBEL.",
       user: {
         _id: user._id,
         username: user.username,
@@ -109,6 +109,45 @@ export const verifyEmail = async (req, res) => {
   }
 };
 
+// Resend OTP
+export const resendOtp = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+    if (user.isVerified)
+      return res
+        .status(404)
+        .json({ message: "Email is already verified, Please login" });
+
+    // backend throttling minimum 1min b/w OTPs
+    const timeSinceLastOtp = user.otpExpire
+      ? new Date(user.otpExpire).getTime() - Date.now()
+      : 0;
+    const nineMinute = 9 * 60 * 1000;
+
+    // Check lasttime OTP is greater than 9min (Force wait 1min)
+    if (timeSinceLastOtp > nineMinute) {
+      return res.status(429).json({
+        message: "Please wait 60 seconds before requesting a new OTP.",
+      });
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    user.verificationOTP = otp;
+    user.otpExpire = new Date(Date.now() + 10 * 60 * 1000);
+    await user.save();
+
+    await sendVerificationEmail(user.email, otp);
+    return res.status(200).json({ message: "New OTP sent successfully." });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Failed to resend OTP" });
+  }
+};
+
+// Login
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -156,6 +195,7 @@ export const loginUser = async (req, res) => {
   }
 };
 
+// Logout
 export const logoutUser = async (req, res) => {
   if (req.user?._id) {
     await User.findByIdAndUpdate(req.user._id, { $unset: { refreshToken: 1 } });
@@ -175,6 +215,7 @@ export const logoutUser = async (req, res) => {
   res.status(200).json({ message: "Logged out successfully" });
 };
 
+// Refresh access token
 export const refreshAccessToken = async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
@@ -222,6 +263,7 @@ export const refreshAccessToken = async (req, res) => {
   }
 };
 
+// Update user profile
 export const updateUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
