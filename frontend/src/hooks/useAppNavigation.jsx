@@ -14,6 +14,7 @@ export const useAppNavigation = () => {
   const goPayment = () => navigate(`/payment/razorpay`);
   const goLogin = () => navigate("/login");
   const goRegister = () => navigate("/register");
+  // const goVerifyEmail = () => navigate("/verify-email")
 
   // admin navigation
   const goAdminDashboard  = () => navigate("/admin/dashboard");
@@ -30,6 +31,7 @@ export const useAppNavigation = () => {
     goPayment,
     goLogin,
     goRegister,
+    // goVerifyEmail,
     goAdminDashboard
   };
 };

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LoginImage from "/src/assets/loginpage.webp";
 import { useAuth } from "../context/AuthContext";
 import { showError, showSuccess } from "../utils/toastService";
+import { useAppNavigation } from "../hooks/useAppNavigation";
 
 const Register = () => {
   const { register } = useAuth();
@@ -11,14 +12,24 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  // const { goVerifyEmail } = useAppNavigation();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const userData = await register({ username, email, password, confirmPassword });
-      if (userData) {
-        showSuccess(`Login successful! Welcome, ${userData.username}`);
+      const registeredMail = await register({
+        username,
+        email,
+        password,
+        confirmPassword,
+      });
+
+      if (registeredMail) {
+        showSuccess("Check your email for the verification code.");
+        // goVerifyEmail();
+        navigate("/verify-email", { state: { email: registeredMail } });
       }
     } catch (error) {
       console.error(error);
@@ -92,7 +103,10 @@ const Register = () => {
 
             <p className="text-xs sm:text-sm text-gray-300 lg:text-gray-500 mt-4 sm:mt-6 lg:text-left">
               Already have an account?{" "}
-              <Link to="/login" className="text-white lg:text-black hover:underline font-semibold lg:font-medium">
+              <Link
+                to="/login"
+                className="text-white lg:text-black hover:underline font-semibold lg:font-medium"
+              >
                 Sign in
               </Link>
             </p>

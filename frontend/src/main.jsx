@@ -17,7 +17,9 @@ createRoot(document.getElementById("root")).render(
         <WishlistCartProvider>
           <SearchProvider>
             <OrderProvider>
-              <App />
+              <StrictMode>
+                <App />
+              </StrictMode>
             </OrderProvider>
           </SearchProvider>
         </WishlistCartProvider>
