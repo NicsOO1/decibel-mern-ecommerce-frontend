@@ -31,6 +31,7 @@ const userSchema = mongoose.Schema(
     },
     otpExpire: {
       type: Date,
+      expires: 0, // Document will be deleted exactly at the date stored in otpExpire (TTL)
     },
   },
   { timestamps: true },
