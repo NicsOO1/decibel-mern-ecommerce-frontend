@@ -1,5 +1,8 @@
 import { User } from "../models/User.js";
-import { sendVerificationEmail } from "../utils/emailService.js";
+import {
+  sendPasswordResetEmail,
+  sendVerificationEmail,
+} from "../utils/emailService.js";
 import { generateTokens } from "../utils/generateToken.js";
 import jwt from "jsonwebtoken";
 
@@ -337,5 +340,114 @@ export const toggleUserBlock = async (req, res) => {
     return res
       .status(500)
       .json({ message: "Server error during user status update" });
+  }
+};
+
+// Forgot password
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user || !user.isVerified) {
+      return res.status(200).json({
+        message:
+          "If an account with that email exists, we've sent a reset code.",
+      });
+    }
+
+    // 60 sec Throttle
+    if (user.resetPasswordOTPExpire) {
+      const timeSinceLastOtp =
+        new Date(user.resetPasswordOTPExpire).getTime() - Date.now();
+      const nineMinutes = 9 * 60 * 1000;
+      if (timeSinceLastOtp > nineMinutes) {
+        return res.status(429).json({
+          message: "Please wait 60 seconds before requesting a new code.",
+        });
+      }
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    user.resetPasswordOTP = otp;
+    user.resetPasswordOTPExpire = new Date(Date.now() + 10 * 60 * 1000);
+    await user.save();
+
+    await sendPasswordResetEmail(email, otp);
+
+    return res.status(200).json({
+      message: "An verification OTP has sent to registered email",
+    });
+  } catch (error) {
+    console.error("Forgot Password Error:", error);
+    return res
+      .status(500)
+      .json({ message: "Server error. Please try again later." });
+  }
+};
+
+// Reset password
+export const resetPassword = async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+
+    if (!email || !otp || !newPassword) {
+      return res
+        .status(400)
+        .json({ message: "Email, OTP, and new password are required" });
+    }
+
+    // Password validation
+    if (newPassword.length < 8) {
+      return res
+        .status(400)
+        .json({ message: "Password must be at least 8 characters" });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Validate OTP
+    if (!user.resetPasswordOTP || user.resetPasswordOTP !== otp) {
+      return res.status(400).json({ message: "Invalid reset code" });
+    }
+
+    // Validate OTP expiry
+    if (
+      !user.resetPasswordOTPExpire ||
+      user.resetPasswordOTPExpire < new Date()
+    ) {
+      return res
+        .status(400)
+        .json({ message: "Reset code has expired. Please request a new one." });
+    }
+
+    // set new password
+    user.password = newPassword;
+    user.resetPasswordOTP = undefined;
+    user.resetPasswordOTPExpire = undefined;
+
+    // SECURITY
+    user.refreshToken = undefined;
+
+    await user.save();
+
+    return res.status(200).json({
+      message:
+        "Password reset successful. Please login with your new password.",
+    });
+  } catch (error) {
+    console.error("Reset Password Error:", error);
+    return res
+      .status(500)
+      .json({ message: "Server error. Please try again later." });
   }
 };

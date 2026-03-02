@@ -1,11 +1,13 @@
 import express from "express";
 import {
+  forgotPassword,
   getAllUsers,
   loginUser,
   logoutUser,
   refreshAccessToken,
   registerUser,
   resendOtp,
+  resetPassword,
   toggleUserBlock,
   updateUserProfile,
   verifyOtp,
@@ -24,7 +26,9 @@ router
   .patch("/profile", protect, updateUserProfile)
   .post("/verify-otp", verifyOtp)
   .post("/resend-otp", resendOtp)
-  .get("/refresh", refreshAccessToken);
+  .get("/refresh", refreshAccessToken)
+  .post("/forgot-password", limiter, forgotPassword)
+  .post("/reset-password", limiter, resetPassword);
 
 //admin routes
 router.patch("/block/:id", protect, admin, toggleUserBlock);
