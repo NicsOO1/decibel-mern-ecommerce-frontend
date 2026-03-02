@@ -38,9 +38,15 @@ const orderSchema = new mongoose.Schema(
       country: String,
     },
     paymentInfo: {
-      upiId: String,
-      status: { type: String, default: "Paid" }, // Since it's a mock success
-      paidAt: { type: Date, default: Date.now },
+      razorpayOrderId: { type: String }, // from Razorpay
+      razorpayPaymentId: { type: String }, // after user pays
+      razorpaySignature: { type: String }, // for verification
+      status: {
+        type: String,
+        enum: ["Pending", "Paid", "Failed"],
+        default: "Pending",
+      },
+      paidAt: { type: Date },
     },
     orderStatus: {
       type: String,
