@@ -25,6 +25,11 @@ const Payment = () => {
 
   const storedData = JSON.parse(localStorage.getItem(`addressOf${user._id}`));
 
+  if (!storedData) {
+    goCheckout(); // redirect back to checkout
+    return null;
+  }
+
   const {
     firstName,
     lastName,
