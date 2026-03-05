@@ -90,7 +90,7 @@ export const cancelOrder = async (req, res) => {
 
     if (order.orderStatus === "Shipped" || order.orderStatus === "Delivered") {
       return res.status(400).json({
-        message: `Cannot cancel an order that is already ${order.status}`,
+        message: `Cannot cancel an order that is already ${order.orderStatus}`,
       });
     }
 
