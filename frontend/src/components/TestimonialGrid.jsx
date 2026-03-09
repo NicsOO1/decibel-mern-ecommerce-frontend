@@ -1,23 +1,27 @@
 import React from "react";
+import blackman from "../assets/blackman.png";
+import shafi from "../assets/shafi.jpeg";
+import bb from "../assets/bb.jpeg";
+import qquote from "../assets/qquote.png";
 
 const TestimonialGrid = () => {
   const testimonials = [
     {
       user: "Sarah John",
       profession: "Music Producer",
-      userImg: "src/assets/blackman.png",
+      userImg: blackman,
       feed: "Never experienced sound this pure. The clarity, the bass, everything feels balanced. Definitely worth every rupee!",
     },
     {
       user: "Shafi Vilayil",
       profession: "Philosopher",
-      userImg: "src/assets/shafi.jpeg",
+      userImg: shafi,
       feed: "Exceptional clarity and comfort. The sound feels rich and balanced, and the noise cancellation makes a huge difference during travel. It’s easily one of the best audio experiences I’ve had premium build, premium sound.",
     },
     {
       user: "Parague Marc",
       profession: "Music Listener",
-      userImg: "src/assets/bb.jpeg",
+      userImg: bb,
       feed: "These earbuds completely elevated my editing and daily listening. Clean vocals, deep bass, and a smooth overall tone. Super comfortable and reliable. Definitely worth it for anyone who loves high-quality sound.",
     },
   ];
@@ -37,7 +41,7 @@ const TestimonialGrid = () => {
             <div key={i} className="relative flex flex-col gap-3 sm:gap-4 items-start justify-center shadow-[0_0_10px_0_rgba(0,0,0,0.1)] rounded-2xl sm:rounded-3xl py-4 sm:py-6 px-4 sm:px-6 lg:px-8">
 
               <div className="absolute -top-4 sm:-top-5 right-6 sm:right-10 w-16 h-16 sm:w-20 sm:h-20 overflow-hidden">
-                <img className="opacity-70 w-full h-full object-cover" src="src/assets/qquote.png" alt="" />
+                <img className="opacity-70 w-full h-full object-cover" src={qquote} alt="" />
               </div>
 
               <div className="flex gap-3 sm:gap-4 items-center">

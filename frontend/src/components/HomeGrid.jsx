@@ -3,6 +3,11 @@ import { BiRightArrowAlt } from "react-icons/bi";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { useAppNavigation } from "../hooks/useAppNavigation";
 import { useSearch } from "../context/SearchContext";
+import cover3 from "../assets/cover3.png";
+import product1 from "../assets/product1.png";
+import headphones from "../assets/headphones.png";
+import speaker from "../assets/speaker.png";
+import tws from "../assets/tws.png";
 
 const HomeGrid = () => {
   const { goProducts } = useAppNavigation();
@@ -56,7 +61,7 @@ const HomeGrid = () => {
 
           <div id="right" className="w-full sm:w-auto flex justify-center sm:justify-end flex-shrink-0">
             <img 
-              src="\src\assets\cover3.png" 
+              src={cover3} 
               alt="" 
               className="w-full sm:w-auto max-w-[200px] sm:max-w-none h-auto object-contain"
             />
@@ -93,7 +98,7 @@ const HomeGrid = () => {
           >
             <img
               className="w-full h-full max-h-[250px] sm:max-h-none object-contain sm:object-cover"
-              src="src/assets/product1.png"
+              src={product1}
               alt=""
             />
           </div>
@@ -122,7 +127,7 @@ const HomeGrid = () => {
               name="headphone"
               onClick={handleImgSearch}
               className="w-full h-full object-contain transition-transform duration-300 ease-in-out group-hover:scale-105 cursor-pointer"
-              src="/src/assets/headphones.png"
+              src={headphones}
               alt=""
             />
           </div>
@@ -143,7 +148,7 @@ const HomeGrid = () => {
               className="h-[180px] sm:h-[200px] lg:h-[230px] mb-2 sm:mb-4 transition-transform duration-300 ease-in-out group-hover:scale-105 cursor-pointer object-contain"
               name="speaker"
               onClick={handleImgSearch}
-              src="/src/assets/speaker.png"
+              src={speaker}
               alt=""
             />
           </div>
@@ -164,7 +169,7 @@ const HomeGrid = () => {
               className="mb-2 sm:mb-4 h-auto max-h-[250px] sm:max-h-[220px] lg:max-h-none transition-transform duration-300 ease-in-out group-hover:scale-105 cursor-pointer object-contain"
               name="tws"
               onClick={handleImgSearch}
-              src="/src/assets/tws.png"
+              src={tws}
               alt=""
             />
           </div>

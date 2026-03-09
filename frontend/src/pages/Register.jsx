@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import LoginImage from "/src/assets/loginpage.webp";
+import LoginImage from "../assets/loginpage.webp";
+import audioDoodleBg from "../assets/audio_doodle_bg.png";
 import { useAuth } from "../context/AuthContext";
 import { showError, showSuccess } from "../utils/toastService";
 import { useAppNavigation } from "../hooks/useAppNavigation";
@@ -38,7 +39,7 @@ const Register = () => {
   };
 
   return (
-    <div className="w-full min-h-screen lg:h-screen lg:overflow-hidden flex flex-col lg:flex-row bg-[url('/src/assets/audio_doodle_bg.png')] bg-cover bg-center lg:bg-none lg:bg-white relative">
+    <div className="w-full min-h-screen lg:h-screen lg:overflow-hidden flex flex-col lg:flex-row lg:bg-none lg:bg-white relative" style={{ backgroundImage: `url(${audioDoodleBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
       <div className="flex-1 flex flex-col justify-center w-full lg:w-1/2 px-4 sm:px-6 lg:px-12 py-8 sm:py-12 lg:py-6 relative z-10 lg:h-full lg:overflow-y-auto">
         {/* Mobile: Glass Card. Desktop: Clean White */}
         <div className="w-full max-w-md mx-auto text-center lg:text-left flex flex-col justify-center bg-slate-50/5 opacity-90 lg:bg-transparent p-8 sm:p-10 lg:p-0 rounded-2xl shadow-lg lg:shadow-none border border-white/20 lg:border-none backdrop-blur-xl lg:backdrop-blur-none">

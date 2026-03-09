@@ -1,6 +1,8 @@
 import React from "react";
 import { useSearch } from "../context/SearchContext";
 import { useAppNavigation } from "../hooks/useAppNavigation";
+import boseImg from "../assets/Products/Bose_H2_No.png";
+import sonyImg from "../assets/Products/x.png";
 
 const ProductGrid = () => {
   const { setSearchTerm } = useSearch();
@@ -31,7 +33,7 @@ const ProductGrid = () => {
         <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-end mt-auto gap-4 sm:gap-0 group">
           <img
             className="h-[200px] sm:h-[300px] lg:h-[420px] w-auto mx-auto sm:mx-0 rotate-6 transition-all duration-500 group-hover:-translate-y-4 object-contain order-1 lg:order-2"
-            src="\src\assets\Products\Bose_H2_No.png"
+            src={boseImg}
             alt="bose"
           />
           <button
@@ -59,7 +61,7 @@ const ProductGrid = () => {
         <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-end mt-auto gap-4 sm:gap-0 group">
           <img
             className="h-[200px] sm:h-[300px] lg:h-[420px] w-auto mx-auto sm:mx-0 rotate-6 transition-all duration-500 group-hover:-translate-y-4 object-contain order-1 lg:order-2"
-            src="\src\assets\Products\x.png"
+            src={sonyImg}
             alt="sony"
           />
           <button

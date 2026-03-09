@@ -1,5 +1,6 @@
 import React from "react";
 import { useAppNavigation } from "../hooks/useAppNavigation";
+import tailImg from "../assets/tail.png";
 
 const Tailer = () => {
   const { goProducts } = useAppNavigation();
@@ -17,7 +18,7 @@ const Tailer = () => {
       <div id="right" className="w-full lg:w-[35%] xl:w-[30%] h-auto lg:h-full flex items-center justify-center overflow-hidden lg:overflow-visible max-h-[280px] sm:max-h-[320px] lg:max-h-none order-2">
         <img
           className="w-full max-w-[240px] sm:max-w-[280px] lg:max-w-none h-auto max-h-[280px] sm:max-h-[320px] lg:max-h-none object-contain rotate-6 lg:scale-110 xl:scale-125"
-          src="/src/assets/tail.png"
+          src={tailImg}
           alt=""
         />
       </div>
