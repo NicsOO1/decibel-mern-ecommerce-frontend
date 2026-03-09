@@ -39,7 +39,12 @@ const Register = () => {
   };
 
   return (
-    <div className="w-full min-h-screen lg:h-screen lg:overflow-hidden flex flex-col lg:flex-row lg:bg-none lg:bg-white relative" style={{ backgroundImage: `url(${audioDoodleBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+    <div className="w-full min-h-screen lg:h-screen lg:overflow-hidden flex flex-col lg:flex-row bg-white relative">
+      {/* Mobile-only doodle background — hidden on lg+ */}
+      <div
+        className="absolute inset-0 lg:hidden bg-cover bg-center"
+        style={{ backgroundImage: `url(${audioDoodleBg})` }}
+      />
       <div className="flex-1 flex flex-col justify-center w-full lg:w-1/2 px-4 sm:px-6 lg:px-12 py-8 sm:py-12 lg:py-6 relative z-10 lg:h-full lg:overflow-y-auto">
         {/* Mobile: Glass Card. Desktop: Clean White */}
         <div className="w-full max-w-md mx-auto text-center lg:text-left flex flex-col justify-center bg-slate-50/5 opacity-90 lg:bg-transparent p-8 sm:p-10 lg:p-0 rounded-2xl shadow-lg lg:shadow-none border border-white/20 lg:border-none backdrop-blur-xl lg:backdrop-blur-none">
